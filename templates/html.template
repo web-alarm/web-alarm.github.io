@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		@input("templates/head.template")
+	</head>
+
+	<body>
+		@content
+
+		<script src="@pathto(assets/js/script)"></script>
+	</body>
+</html>
