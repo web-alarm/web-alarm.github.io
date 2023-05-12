@@ -8,5 +8,6 @@
 		@content
 
 		<script src="@pathto(assets/js/script)"></script>
+		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4505367255463806" crossorigin="anonymous"></script>
 	</body>
 </html>
