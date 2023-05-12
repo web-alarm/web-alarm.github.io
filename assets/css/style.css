@@ -1,0 +1,39 @@
+html, body, div, applet, object,
+iframe, h1, h2, h3, h4, h5, h6, blockquote,
+pre, a, abbr, acronym, address, big, cite,
+code, del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, b,
+u, i, center, dl, dt, dd, fieldset,
+form, label, legend, table, caption, tbody,
+tfoot, thead, tr, th, td, article, aside,
+canvas, details, embed, figure, figcaption,
+header, hgroup, output, ruby,
+section, summary, time, mark, audio, video {
+	margin:  0 0 0 0;
+	line-height: 1.25em;
+	box-sizing: border-box;
+	max-width: 100%;
+
+	scrollbar-color: var(--rnbw-color) transparent !important;
+}
+
+body
+{
+	background: #181a1b; /*#313438 1f2223*/
+	color: #ffffff;
+	font-family: "oxygen";
+	max-width: 100%;
+	min-height: 100%;
+	margin: 0 0;
+	/*padding-bottom: 2em;*/
+}
+
+button {
+	margin: 0.5em;
+}
+
+#img-ring {
+	background: hsl(50deg, 75%, 50%);
+	width: 10em;
+	margin-top: -40px;
+}
