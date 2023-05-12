@@ -30,6 +30,45 @@ body
 
 button {
 	margin: 0.5em;
+	cursor: pointer;
+}
+
+input {
+	background: white;
+	color: black;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+  width: 1.5em;
+}
+
+input[disabled] {
+	background: #756a64;
+}
+
+.fs-1em {
+	font-size: 1em;
+}
+.fs-1-5em {
+	font-size: 1.5em;
+}
+.fs-2em {
+	font-size: 2em;
+}
+.fs-3em {
+	font-size: 3em;
+}
+.fs-4em {
+	font-size: 4em;
 }
 
 #img-ring {

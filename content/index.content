@@ -1,21 +1,21 @@
 <audio id="my_audio" onended="snooze_alarm()"></audio>
 
 <div align="center" id="div-set-alarm" style="margin-top: 25vh">
-	<h1><div id="div-current-time"></div></h1><br><br>
+	<div id="div-current-time" class="fs-4em"></div><br><br>
 
-	<input type="number" min=0 max=23 id="input-hour" onchange="check_hour()">
-	<input type="number" min=0 max=59 id="input-minute" onchange="check_minute()">
+	<input type="number" min=0 max=23 id="input-hour" class="fs-2em" onchange="check_hour()"><div class="fs-2em" style="display: inline-flex">&nbsp;:</div>
+	<input type="number" min=0 max=59 id="input-minute" class="fs-2em" onchange="check_minute()">
 
-	<button onclick="set_alarm()" id="button-set">set</button>
-	<button onclick="unset_alarm()" id="button-unset" disabled="true">unset</button>
+	<button onclick="set_alarm()" id="button-set" class="fs-2em">set</button>
+	<button onclick="unset_alarm()" id="button-unset" class="fs-2em" disabled="true">unset</button>
 </div>
 
 <div align="center" id="div-snooze-stop" style="margin-top: 25vh">
 	<img src="@pathtofile(output/assets/images/ring.png)" id="img-ring"><br>
-	<h1><div id="div-current-time-playing"></div></h1><br>
+	<div id="div-current-time-playing" class="fs-3em"></div><br>
 
-	<button onclick="snooze_alarm()" id="button-snooze" disabled="true">snooze</button>
-	<button onclick="stop_alarm()" id="button-stop" disabled="true">stop</button>
+	<button onclick="snooze_alarm()" id="button-snooze" class="fs-2em" disabled="true">snooze</button>
+	<button onclick="stop_alarm()" id="button-stop" class="fs-2em" disabled="true">stop</button>
 </div>
 
 <script>
