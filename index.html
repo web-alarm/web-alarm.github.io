@@ -75,6 +75,7 @@
 			      <option value="deaf-kev-invincible">DEAF KEV - Invincible</option>
 			      <option value="clarx-hay">Clarx - H.A.Y</option>
 			      <option value="desmeon-hellcat">Desmeon - Hellcat</option>
+			      <option value="neffex-my-way">NEFFEX - My Way</option>
 			    </select>
 			  </div>
 			
@@ -186,6 +187,7 @@
 			      document.getElementById("input-bg-url").style.display = "none";
 			      document.getElementById("input-bg-path").style.display = "none";
 			
+			      /*images from https://unblast.com/10-free-space-background-images-jpg/*/
 			      if(bg_type == "space-blue") {
 			        document.getElementById("select-bg").value = "space-blue";
 			        document.body.style.backgroundImage = "url('assets/images/space-blue.jpg')";
@@ -261,7 +263,9 @@
 						myAudio.src = "assets/mp3/Clarx-H.A.Y.mp3";
 					else if(tune == "desmeon-hellcat")
 						myAudio.src = "assets/mp3/Desmeon-Hellcat.mp3";
-					//Music provided by http://spoti.fi/NCS
+					else if(tune == "neffex-my-way")
+						myAudio.src = "assets/mp3/NEFFEX-My-Way.mp3";
+					//Music provided by http://spoti.fi/NCS and NEFFEX
 				
 					function animate_ring() {
 						if(!myAudio.paused) {
@@ -288,7 +292,7 @@
 						document.getElementById('button-snooze').disabled = false;
 						document.getElementById('button-stop').disabled = false;
 						document.getElementById('button-snooze').focus();
-						
+				
 						animate_ring();
 					}
 				
