@@ -1,0 +1,169 @@
+<div id="settings-page">
+  <div class="settings-cross" >
+    <i id="close-settings-icon" class="fa fa-xmark fa-green" onclick="close_settings()"></i>
+  </div>
+
+  <div class="m-1em-0">
+    <label for="select-bg">background:</label>
+    <select id="select-bg" onchange="selectChanged()" style="margin-bottom: 0.5em">
+      <option value="none">none</option>
+      <option value="space-blue">space blue</option>
+      <option value="space-green">space green</option>
+      <option value="space-purple">space purple</option>
+      <option value="space-red">space red</option>
+      <option value="url">url</option>
+      <option value="file">file</option>
+    </select><br>
+    <input 
+      id="input-bg-url"
+      placeholder="url"
+      spellcheck="false"
+      style="max-width:80%; width: 400px"
+    >
+    <input 
+      id="input-bg-path"
+      placeholder="path"
+      spellcheck="false"
+      style="max-width:80%; width: 400px"
+    > 
+  </div>
+
+  <div class="m-1em-0">
+    <label for="select-tune">tune:</label>
+    <select id="select-tune">
+      <option value="warriyo-mortals">Warriyo - Mortals</option>
+      <option value="niviro-demons">Niviro - Demons</option>
+      <option value="deaf-kev-invincible">DEAF KEV - Invincible</option>
+      <option value="clarx-hay">Clarx - H.A.Y</option>
+      <option value="desmeon-hellcat">Desmeon - Hellcat</option>
+    </select>
+  </div>
+
+  <button onclick="save()">save</button>
+
+  <div id="div-saved" align="center" onclick="hideSavedMsg()">settings saved</div>
+</div>
+
+<script>
+  function hideSavedMsg() {
+    document.getElementById("div-saved").style.display = "none";
+  }
+
+  function save() {
+    var bg_type = document.getElementById("select-bg").value;
+
+    if(bg_type == "url") {
+      localStorage.setItem("bg-type", "url");
+      localStorage.setItem("bg-url", document.getElementById("input-bg-url").value);
+      localStorage.removeItem("bg-path");
+      document.getElementById("input-bg-url").style.display = "inline-flex";
+      document.getElementById("input-bg-path").style.display = "none";
+
+      document.body.style.backgroundImage = "url('" + localStorage.getItem("bg-url") + "')";
+    }
+    else if(bg_type == "file") {
+      localStorage.setItem("bg-type", "path");
+      localStorage.setItem("bg-path", document.getElementById("input-bg-path").value);
+      localStorage.removeItem("bg-url");
+      document.getElementById("input-bg-url").style.display = "none";
+      document.getElementById("input-bg-path").style.display = "inline-flex";
+
+      document.body.style.backgroundImage = "url('" + localStorage.getItem("bg-path") + "')";
+    }
+    else {
+      localStorage.removeItem("bg-url");
+      localStorage.removeItem("bg-path");
+      document.getElementById("input-bg-url").style.display = "none";
+      document.getElementById("input-bg-path").style.display = "none";
+
+      if(bg_type == "space-blue") {
+        localStorage.setItem("bg-type", "space-blue");
+        document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-blue.jpg)')";
+      }
+      else if(bg_type == "space-green") {
+        localStorage.setItem("bg-type", "space-green");
+        document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-green.jpg)')";
+      }
+      else if(bg_type == "space-purple") {
+        localStorage.setItem("bg-type", "space-purple");
+        document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-purple.jpg)')";
+      }
+      else if(bg_type == "space-red") {
+        localStorage.setItem("bg-type", "space-red");
+        document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-red.jpg)')";
+      }
+      else {
+        localStorage.setItem("bg-type", "none");
+        document.body.style.backgroundImage = "none";
+      }
+    }
+
+    localStorage.setItem("alarm-choice", document.getElementById("select-tune").value);
+
+    document.getElementById("div-saved").style.display = "initial";
+    setTimeout(hideSavedMsg, 1000);
+  }
+
+  function selectChanged() {
+    if(document.getElementById("select-bg").value == "url") {
+      document.getElementById("input-bg-url").style.display = "inline-flex";
+      document.getElementById("input-bg-path").style.display = "none";
+    }
+    else if(document.getElementById("select-bg").value == "file") {
+      document.getElementById("input-bg-url").style.display = "none";
+      document.getElementById("input-bg-path").style.display = "inline-flex";
+    }
+    else {
+      document.getElementById("input-bg-url").style.display = "none";
+      document.getElementById("input-bg-path").style.display = "none";
+    }
+  }
+
+  var bg_type = localStorage.getItem("bg-type");
+
+  if(!bg_type) {
+    bg_type = "space-green";
+    localStorage.setItem("bg-type", bg_type);
+  }
+
+  if(bg_type) {
+    if(bg_type == "url") {
+      document.getElementById("select-bg").value = "url";
+      document.getElementById("input-bg-url").value = localStorage.getItem("bg-url");
+      document.getElementById("input-bg-url").style.display = "inline-flex";
+      document.getElementById("input-bg-path").style.display = "none";
+
+      document.body.style.backgroundImage = "url('" + localStorage.getItem("bg-url") + "')";
+    }
+    else if(bg_type == "path") {
+      document.getElementById("select-bg").value = "file";
+      document.getElementById("input-bg-path").value = localStorage.getItem("bg-path");
+      document.getElementById("input-bg-url").style.display = "none";
+      document.getElementById("input-bg-path").style.display = "inline-flex";
+
+      document.body.style.backgroundImage = "url('" + localStorage.getItem("bg-path") + "')";
+    }
+    else {
+      document.getElementById("input-bg-url").style.display = "none";
+      document.getElementById("input-bg-path").style.display = "none";
+
+      if(bg_type == "space-blue") {
+        document.getElementById("select-bg").value = "space-blue";
+        document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-blue.jpg)')";
+      }
+      else if(bg_type == "space-green") {
+        document.getElementById("select-bg").value = "space-green";
+        document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-green.jpg)')";
+      }
+      else if(bg_type == "space-purple") {
+        document.getElementById("select-bg").value = "space-purple";
+        document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-purple.jpg)')";
+      }
+      else if(bg_type == "space-red") {
+        document.getElementById("select-bg").value = "space-red";
+        document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-red.jpg)')";
+      }
+    }
+  }
+
+</script>

@@ -1,28 +1,49 @@
 <audio id="my_audio" onended="snooze_alarm()"></audio>
 
-<div align="center" id="div-set-alarm" style="margin-top: 25vh">
+<div align="center" id="div-set-alarm">
 	<div id="div-current-time" class="fs-4em"></div><br><br>
 
-	<input type="number" min=0 max=23 id="input-hour" class="fs-2em" onchange="check_hour()"><div class="fs-2em" style="display: inline-flex">&nbsp;:&nbsp;</div>
-	<input type="number" min=0 max=59 id="input-minute" class="fs-2em" onchange="check_minute()">
+	<input type="number" min=0 max=23 id="input-hour" onchange="check_hour()"><div class="fs-2em" style="display: inline-flex">:</div>
+	<input type="number" min=0 max=59 id="input-minute" onchange="check_minute()">
 
-	<button onclick="set_alarm()" id="button-set" class="fs-2em">set</button>
-	<button onclick="unset_alarm()" id="button-unset" class="fs-2em" disabled="true">unset</button>
+	<button onclick="set_alarm()" id="button-set">set</button>
+	<button onclick="unset_alarm()" id="button-unset" disabled="true">unset</button>
 </div>
 
-<div align="center" id="div-snooze-stop" style="margin-top: 25vh">
+<div align="center" id="div-snooze-stop">
 	<img src="@pathtofile(output/assets/images/ring.png)" id="img-ring"><br>
 	<div id="div-current-time-playing" class="fs-4em"></div><br>
 
-	<button onclick="snooze_alarm()" id="button-snooze" class="fs-2em" disabled="true">snooze</button>
-	<button onclick="stop_alarm()" id="button-stop" class="fs-2em" disabled="true">stop</button>
+	<button onclick="snooze_alarm()" id="button-snooze" disabled="true">snooze</button>
+	<button onclick="stop_alarm()" id="button-stop" disabled="true">stop</button>
 </div>
 
 <script>
 	var h = 0;
 	var alarmTimeout;
 	var myAudio = document.getElementById('my_audio');
-	myAudio.src = "@pathto(output/assets/mp3/Warriyo-Mortals.mp3)";
+
+	if(!localStorage.getItem("alarm-choice")) {
+		localStorage.setItem("alarm-choice", "warriyo-mortals");
+	}
+
+	var tune = localStorage.getItem("alarm-choice")
+
+	if(!tune)
+	    localStorage.setItem("alarm-choice", "warriyo-mortals");
+  	else
+    	document.getElementById("select-tune").value = tune;
+
+	if(tune == "warriyo-mortals") 
+		myAudio.src = "@pathto(output/assets/mp3/Warriyo-Mortals.mp3)";
+	else if(tune == "niviro-demons")
+		myAudio.src = "@pathto(output/assets/mp3/Niviro-Demons.mp3)";
+	else if(tune == "deaf-kev-invincible")
+		myAudio.src = "@pathto(output/assets/mp3/DEAF_KEV-Invincible.mp3)";
+	else if(tune == "clarx-hay")
+		myAudio.src = "@pathto(output/assets/mp3/Clarx-H.A.Y.mp3)";
+	else if(tune == "desmeon-hellcat")
+		myAudio.src = "@pathto(output/assets/mp3/Desmeon-Hellcat.mp3)";
 	//Music provided by http://spoti.fi/NCS
 
 	function animate_ring() {
@@ -44,11 +65,13 @@
 		document.getElementById('button-unset').disabled = true;
 		document.getElementById('button-unset').style.display = "none";
 
-		document.getElementById('button-snooze').disabled = false;
-		document.getElementById('button-stop').disabled = false;
-
 		document.getElementById('div-set-alarm').style.display = "none";
 		document.getElementById('div-snooze-stop').style.display = "block";
+
+		document.getElementById('button-snooze').disabled = false;
+		document.getElementById('button-stop').disabled = false;
+		document.getElementById('button-snooze').focus();
+		
 		animate_ring();
 	}
 
@@ -132,6 +155,8 @@
 		document.getElementById('input-minute').value = String(document.getElementById('input-minute').value).padStart(2, '0');
 	}
 
+	var curr_time;
+
 	function update_current_time() {
 		var curr_time = new Date();
 		if(myAudio.paused)
@@ -141,8 +166,12 @@
 		setTimeout(function(){update_current_time()}, 1);
 	}
 
-	document.getElementById('input-hour').value = (new Date()).getHours();
-	document.getElementById('input-minute').value = (new Date()).getMinutes();
+	curr_time = new Date();
+	curr_time.setMinutes(curr_time.getMinutes() + 1);
+
+	document.getElementById('input-hour').value = curr_time.getHours();
+	document.getElementById('input-minute').value = curr_time.getMinutes();
+	document.getElementById('button-set').focus();
 	document.getElementById('button-unset').style.display = "none";
 
 	document.getElementById('div-snooze-stop').style.display = "none";

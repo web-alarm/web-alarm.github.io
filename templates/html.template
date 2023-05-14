@@ -5,9 +5,24 @@
 	</head>
 
 	<body>
-		@content
+		<div align="center"  id="body">
+			@input("templates/menu.template")
+			@input("templates/settings.template")
 
-		<script src="@pathto(assets/js/script)"></script>
-		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4505367255463806" crossorigin="anonymous"></script>
+			<div id="content">
+				<div class="menu-bars">
+					<i id="open-menu-icon" class="fa fa-bars fa-green" onclick="show_menu()"></i>
+				</div>
+				<div class="settings-cog">
+					<i id="open-settings-icon" class="fa fa-gear-solid fa-green" onclick="show_settings()"></i>
+				</div>
+
+				@content
+			</div>
+		</div>
+
+		<script type="text/javascript" src="@pathto(assets/js/menu)"></script>
+		<script type="text/javascript" src="@pathto(assets/js/settings)"></script>
+		<script type="text/javascript" src="@pathto(assets/js/script)"></script>
 	</body>
 </html>

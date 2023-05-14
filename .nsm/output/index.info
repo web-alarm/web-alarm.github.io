@@ -1,4 +1,4 @@
-08:47:14 Saturday May 13 2023
+01:50:24 Monday May 15 2023
 'index'
 'index'
 'templates/html.template'
@@ -6,3 +6,5 @@
 'content/index.content'
 'templates/head.template'
 'templates/html.template'
+'templates/menu.template'
+'templates/settings.template'

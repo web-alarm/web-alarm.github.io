@@ -1,3 +1,10 @@
+:root {
+  --blue: #6495ed;
+  --rnbw-color: #6495ed;
+  --rnbw-color-hover: #14bdff;
+  --fa-angle-path: url("@pathto(output/assets/icons/inverted/angle-down-solid.png)");
+}
+
 html, body, div, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, blockquote,
 pre, a, abbr, acronym, address, big, cite,
@@ -20,6 +27,8 @@ section, summary, time, mark, audio, video {
 body
 {
 	background: #181a1b; /*#313438 1f2223*/
+	background-size: 100vw 100vh;
+	background-repeat: no-repeat;
 	color: #ffffff;
 	font-family: "oxygen";
 	max-width: 100%;
@@ -28,13 +37,46 @@ body
 	/*padding-bottom: 2em;*/
 }
 
+#content
+{
+	overflow-y: hidden;
+	margin: 25vh 0;
+	max-width: 90%;
+	width: 850px;
+	text-align: left;
+}
+
+@media screen and (max-height: 600px) {
+	#content {
+		margin: 10vh 0;
+	}
+}
+
+ul li {
+  list-style: none;
+  list-style-position: inside !important;
+}
+
+#content ul li::before {
+  content: "\2022";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+  color: var(--rnbw-color-hover); /* Change the color #cf7327*/
+  font-weight: bold; /* If you want it to be bold */
+  font-size: 11pt;
+  display: inline-block; /* Needed to add space between the bullet and the text */
+  width: 1em; /* Also needed for space (tweak if needed) */
+  margin-left: 0em; /* Also needed for space (tweak if needed) */
+}
+
 button {
+	background: rgba(255, 255, 255, 0.5);
 	margin: 0.5em;
 	cursor: pointer;
+	border: 0px;
 }
 
 input {
-	background: white;
+	background: rgba(255, 255, 255, 0.75);
+	border: 0px;
 	color: black;
 }
 
@@ -52,7 +94,28 @@ input[type=number] {
 }
 
 input[disabled] {
-	background: #756a64;
+	background: rgba(255, 255, 255, 0.25);
+}
+
+#input-hour, #input-minute,
+#button-set, #button-unset,
+#button-snooze, #button-stop {
+	font-size: 1.5em;
+}
+@media screen and (max-width: 700px) {
+	#input-hour, #input-minute,
+	#button-set, #button-unset,
+	#button-snooze, #button-stop {
+		font-size: 2em;
+	}
+}
+
+.m-1em-0 {
+	margin: 1em 0;
+}
+
+.m-1em {
+	margin: 1em;
 }
 
 .fs-1em {
@@ -74,5 +137,51 @@ input[disabled] {
 #img-ring {
 	background: hsl(50deg, 75%, 50%);
 	width: 12.5em;
-	margin-top: -40px;
+	padding: -3px;
+}
+
+#div-set-alarm {
+	background: rgba(24, 26, 27, 0.5);
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	width: 300px;
+	max-width: 90%;
+	border-radius: 1em;
+}
+
+#div-snooze-stop { 
+	background: rgba(24, 26, 27, 0.5);
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	padding-top: 1em;
+	width: 300px;
+	max-width: 90%;
+	border-radius: 1em;
+}
+
+/* width */
+::-webkit-scrollbar 
+{
+	width: 8px;
+	height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track 
+{
+ 	background: #181a1b; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb 
+{
+ 	background: #5fb267;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover 
+{
+ 	background: #14bdff;
 }
