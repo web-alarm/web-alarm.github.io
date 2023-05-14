@@ -44,7 +44,9 @@
 		myAudio.src = "@pathto(output/assets/mp3/Clarx-H.A.Y.mp3)";
 	else if(tune == "desmeon-hellcat")
 		myAudio.src = "@pathto(output/assets/mp3/Desmeon-Hellcat.mp3)";
-	//Music provided by http://spoti.fi/NCS
+	else if(tune == "neffex-my-way")
+		myAudio.src = "@pathto(output/assets/mp3/NEFFEX-My-Way.mp3)";
+	//Music provided by http://spoti.fi/NCS and NEFFEX
 
 	function animate_ring() {
 		if(!myAudio.paused) {
@@ -71,7 +73,7 @@
 		document.getElementById('button-snooze').disabled = false;
 		document.getElementById('button-stop').disabled = false;
 		document.getElementById('button-snooze').focus();
-		
+
 		animate_ring();
 	}
 

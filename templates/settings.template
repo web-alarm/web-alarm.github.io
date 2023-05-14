@@ -36,6 +36,7 @@
       <option value="deaf-kev-invincible">DEAF KEV - Invincible</option>
       <option value="clarx-hay">Clarx - H.A.Y</option>
       <option value="desmeon-hellcat">Desmeon - Hellcat</option>
+      <option value="neffex-my-way">NEFFEX - My Way</option>
     </select>
   </div>
 
@@ -147,6 +148,7 @@
       document.getElementById("input-bg-url").style.display = "none";
       document.getElementById("input-bg-path").style.display = "none";
 
+      /*images from https://unblast.com/10-free-space-background-images-jpg/*/
       if(bg_type == "space-blue") {
         document.getElementById("select-bg").value = "space-blue";
         document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-blue.jpg)')";
