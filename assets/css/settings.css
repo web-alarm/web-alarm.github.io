@@ -1,0 +1,46 @@
+.settings-cog, .settings-cross {
+  position: absolute;
+  top: 1em;
+  text-align: center;
+}
+.settings-cog {
+  left: 3em;
+}
+.settings-cross {
+  left: 1em;
+}
+
+.settings-cog:hover, .settings-cross:hover {
+  cursor: grab;
+}
+
+#close-settings-icon, #open-settings-icon {
+  width: 1.5em;
+  height: 1.5em;
+  padding-top: 0em;
+}
+
+#settings-page {
+  visibility: hidden;
+  position: fixed; /*absolute/fixed both work*/
+  overflow-y: auto;
+  background: #1f2223; /*181a1b 1f2223*/
+  padding-top: 4em;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+}
+
+#div-saved {
+  background: rgba(50, 50, 50);
+  position: absolute;
+  bottom: 1em;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  padding: 1em;
+  max-width: 300px;
+  display: none;
+}

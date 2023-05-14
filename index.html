@@ -10,164 +10,398 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
 		<link rel="stylesheet" href="assets/css/style.css">
+		<link rel="stylesheet" href="assets/css/font-awesome.css">
+		<link rel="stylesheet" href="assets/css/menu.css">
+		<link rel="stylesheet" href="assets/css/settings.css">
 	</head>
 
 	<body>
-		<audio id="my_audio" onended="snooze_alarm()"></audio>
-		
-		<div align="center" id="div-set-alarm" style="margin-top: 25vh">
-			<div id="div-current-time" class="fs-4em"></div><br><br>
-		
-			<input type="number" min=0 max=23 id="input-hour" class="fs-2em" onchange="check_hour()"><div class="fs-2em" style="display: inline-flex">&nbsp;:&nbsp;</div>
-			<input type="number" min=0 max=59 id="input-minute" class="fs-2em" onchange="check_minute()">
-		
-			<button onclick="set_alarm()" id="button-set" class="fs-2em">set</button>
-			<button onclick="unset_alarm()" id="button-unset" class="fs-2em" disabled="true">unset</button>
-		</div>
-		
-		<div align="center" id="div-snooze-stop" style="margin-top: 25vh">
-			<img src="assets/images/ring.png" id="img-ring"><br>
-			<div id="div-current-time-playing" class="fs-4em"></div><br>
-		
-			<button onclick="snooze_alarm()" id="button-snooze" class="fs-2em" disabled="true">snooze</button>
-			<button onclick="stop_alarm()" id="button-stop" class="fs-2em" disabled="true">stop</button>
-		</div>
-		
-		<script>
-			var h = 0;
-			var alarmTimeout;
-			var myAudio = document.getElementById('my_audio');
-			myAudio.src = "assets/mp3/Warriyo-Mortals.mp3";
-			//Music provided by http://spoti.fi/NCS
-		
-			function animate_ring() {
-				if(!myAudio.paused) {
-					h = (h+15)%360;
-					document.getElementById('img-ring').style.background = "hsl(" + h + "deg, 75%, 50%)";
-					setTimeout(function(){animate_ring()}, 100);
-				}
-			}
-		
-			function play_alarm() {
-				myAudio.play();
-		
-				document.getElementById('input-hour').disabled = false;
-				document.getElementById('input-minute').disabled = false;
-				document.getElementById('my_audio').disabled = false;
-				document.getElementById('button-set').disabled = false;
-				document.getElementById('button-set').style.display = "inline-flex";
-				document.getElementById('button-unset').disabled = true;
-				document.getElementById('button-unset').style.display = "none";
-		
-				document.getElementById('button-snooze').disabled = false;
-				document.getElementById('button-stop').disabled = false;
-		
-				document.getElementById('div-set-alarm').style.display = "none";
-				document.getElementById('div-snooze-stop').style.display = "block";
-				animate_ring();
-			}
-		
-			function stop_alarm() {
-				myAudio.pause();
-				myAudio.currentTime = 0;
-		
-				document.getElementById('button-snooze').disabled = true;
-				document.getElementById('button-stop').disabled = true;
-		
-				document.getElementById('div-set-alarm').style.display = "block";
-				document.getElementById('div-snooze-stop').style.display = "none";
-			}
-		
-			function snooze_alarm() {
-				stop_alarm();
-		
-				var alarm_time = new Date();
-				alarm_time.setMinutes(alarm_time.getMinutes() + 10);
-				alarm_time.setSeconds(0);
-		
-				document.getElementById('input-hour').value = String(alarm_time.getHours()).padStart(2, '0');
-				document.getElementById('input-minute').value = String(alarm_time.getMinutes()).padStart(2, '0');
-		
-				set_alarm();
-		
-				document.getElementById('div-set-alarm').style.display = "block";
-				document.getElementById('div-snooze-stop').style.display = "none";
-			}
-		
-			function set_alarm() {
-				var alarm_time = new Date();
-				alarm_time.setHours(document.getElementById('input-hour').value);
-				alarm_time.setMinutes(document.getElementById('input-minute').value);
-				alarm_time.setSeconds(0);
-				var diff = new Date(alarm_time) - new Date();
-		
-				if(diff < 0) {
-					alarm_time.setDate(alarm_time.getDate() + 1);
-					diff = new Date(alarm_time) - new Date();
-				}
-		
-				alarmTimeout = setTimeout(function(){play_alarm()}, diff);
-		
-				document.getElementById('input-hour').disabled = true;
-				document.getElementById('input-minute').disabled = true;
-				document.getElementById('my_audio').disabled = true;
-				document.getElementById('button-set').disabled = true;
-				document.getElementById('button-set').style.display = "none";
-				document.getElementById('button-unset').disabled = false;
-				document.getElementById('button-unset').style.display = "inline-flex";
-			}
-		
-			function unset_alarm() {
-				clearTimeout(alarmTimeout);
-		
-				document.getElementById('input-hour').disabled = false;
-				document.getElementById('input-minute').disabled = false;
-				document.getElementById('my_audio').disabled = false;
-				document.getElementById('button-set').disabled = false;
-				document.getElementById('button-set').style.display = "inline-flex";
-				document.getElementById('button-unset').disabled = true;
-				document.getElementById('button-unset').style.display = "none";
-			}
-		
-			function check_hour() {
-				if(document.getElementById('input-hour').value < 0)
-					document.getElementById('input-hour').value = 0;
-				else if(document.getElementById('input-hour').value > 23)
-					document.getElementById('input-hour').value = document.getElementById('input-hour').value%24;
-		
-				document.getElementById('input-hour').value = String(document.getElementById('input-hour').value).padStart(2, '0');
-			}
-		
-			function check_minute() {
-				if(document.getElementById('input-minute').value < 0)
-					document.getElementById('input-minute').value = 0;
-				else if(document.getElementById('input-minute').value > 59)
-					document.getElementById('input-minute').value = document.getElementById('input-minute').value%60;
-		
-				document.getElementById('input-minute').value = String(document.getElementById('input-minute').value).padStart(2, '0');
-			}
-		
-			function update_current_time() {
-				var curr_time = new Date();
-				if(myAudio.paused)
-					document.getElementById('div-current-time').innerHTML = String(curr_time.getHours()).padStart(2, '0') + ":" + String(curr_time.getMinutes()).padStart(2, '0') + ":" + String(curr_time.getSeconds()).padStart(2, '0');
-				else
-					document.getElementById('div-current-time-playing').innerHTML = String(curr_time.getHours()).padStart(2, '0') + ":" + String(curr_time.getMinutes()).padStart(2, '0') + ":" + String(curr_time.getSeconds()).padStart(2, '0');
-				setTimeout(function(){update_current_time()}, 1);
-			}
-		
-			document.getElementById('input-hour').value = (new Date()).getHours();
-			document.getElementById('input-minute').value = (new Date()).getMinutes();
-			document.getElementById('button-unset').style.display = "none";
-		
-			document.getElementById('div-snooze-stop').style.display = "none";
-		
-			update_current_time();
-			document.getElementById('input-hour').value = String(document.getElementById('input-hour').value).padStart(2, '0');
-			document.getElementById('input-minute').value = String(document.getElementById('input-minute').value).padStart(2, '0');
-		</script>
+		<div align="center"  id="body">
+			<div id="menu-page">
+			  <div class="menu-cross" >
+			    <i id="close-menu-icon" class="fa fa-xmark fa-green" onclick="close_menu()"></i>
+			  </div>
+			  
+			  <nav id="nav" class="noselect">
+			    <ul>
+			      <li class="item li-menu li-dark">
+			        <a class="item-link" href="index.html">home</a>
+			      </li>
+			      <li class="item li-menu li-dark has-submenu">
+			        <a tabindex="0" href="#" class="submenu-link" onclick="toggle_submenu(0)">work<i class="submenu-link-icon fa fa-angle-down-png fa-1x"></i></a>
+			        <ul class="submenu" align="center">
+			          <li class="subitem"><a href="#">eg</a></li>
+			          <li class="subitem"><a href="#">eg</a></li>
+			        </ul>
+			      </li>
+			    </ul>
+			  </nav>
+			</div>
+			<div id="settings-page">
+			  <div class="settings-cross" >
+			    <i id="close-settings-icon" class="fa fa-xmark fa-green" onclick="close_settings()"></i>
+			  </div>
+			
+			  <div class="m-1em-0">
+			    <label for="select-bg">background:</label>
+			    <select id="select-bg" onchange="selectChanged()" style="margin-bottom: 0.5em">
+			      <option value="none">none</option>
+			      <option value="space-blue">space blue</option>
+			      <option value="space-green">space green</option>
+			      <option value="space-purple">space purple</option>
+			      <option value="space-red">space red</option>
+			      <option value="url">url</option>
+			      <option value="file">file</option>
+			    </select><br>
+			    <input 
+			      id="input-bg-url"
+			      placeholder="url"
+			      spellcheck="false"
+			      style="max-width:80%; width: 400px"
+			    >
+			    <input 
+			      id="input-bg-path"
+			      placeholder="path"
+			      spellcheck="false"
+			      style="max-width:80%; width: 400px"
+			    > 
+			  </div>
+			
+			  <div class="m-1em-0">
+			    <label for="select-tune">tune:</label>
+			    <select id="select-tune">
+			      <option value="warriyo-mortals">Warriyo - Mortals</option>
+			      <option value="niviro-demons">Niviro - Demons</option>
+			      <option value="deaf-kev-invincible">DEAF KEV - Invincible</option>
+			      <option value="clarx-hay">Clarx - H.A.Y</option>
+			      <option value="desmeon-hellcat">Desmeon - Hellcat</option>
+			    </select>
+			  </div>
+			
+			  <button onclick="save()">save</button>
+			
+			  <div id="div-saved" align="center" onclick="hideSavedMsg()">settings saved</div>
+			</div>
+			
+			<script>
+			  function hideSavedMsg() {
+			    document.getElementById("div-saved").style.display = "none";
+			  }
+			
+			  function save() {
+			    var bg_type = document.getElementById("select-bg").value;
+			
+			    if(bg_type == "url") {
+			      localStorage.setItem("bg-type", "url");
+			      localStorage.setItem("bg-url", document.getElementById("input-bg-url").value);
+			      localStorage.removeItem("bg-path");
+			      document.getElementById("input-bg-url").style.display = "inline-flex";
+			      document.getElementById("input-bg-path").style.display = "none";
+			
+			      document.body.style.backgroundImage = "url('" + localStorage.getItem("bg-url") + "')";
+			    }
+			    else if(bg_type == "file") {
+			      localStorage.setItem("bg-type", "path");
+			      localStorage.setItem("bg-path", document.getElementById("input-bg-path").value);
+			      localStorage.removeItem("bg-url");
+			      document.getElementById("input-bg-url").style.display = "none";
+			      document.getElementById("input-bg-path").style.display = "inline-flex";
+			
+			      document.body.style.backgroundImage = "url('" + localStorage.getItem("bg-path") + "')";
+			    }
+			    else {
+			      localStorage.removeItem("bg-url");
+			      localStorage.removeItem("bg-path");
+			      document.getElementById("input-bg-url").style.display = "none";
+			      document.getElementById("input-bg-path").style.display = "none";
+			
+			      if(bg_type == "space-blue") {
+			        localStorage.setItem("bg-type", "space-blue");
+			        document.body.style.backgroundImage = "url('assets/images/space-blue.jpg')";
+			      }
+			      else if(bg_type == "space-green") {
+			        localStorage.setItem("bg-type", "space-green");
+			        document.body.style.backgroundImage = "url('assets/images/space-green.jpg')";
+			      }
+			      else if(bg_type == "space-purple") {
+			        localStorage.setItem("bg-type", "space-purple");
+			        document.body.style.backgroundImage = "url('assets/images/space-purple.jpg')";
+			      }
+			      else if(bg_type == "space-red") {
+			        localStorage.setItem("bg-type", "space-red");
+			        document.body.style.backgroundImage = "url('assets/images/space-red.jpg')";
+			      }
+			      else {
+			        localStorage.setItem("bg-type", "none");
+			        document.body.style.backgroundImage = "none";
+			      }
+			    }
+			
+			    localStorage.setItem("alarm-choice", document.getElementById("select-tune").value);
+			
+			    document.getElementById("div-saved").style.display = "initial";
+			    setTimeout(hideSavedMsg, 1000);
+			  }
+			
+			  function selectChanged() {
+			    if(document.getElementById("select-bg").value == "url") {
+			      document.getElementById("input-bg-url").style.display = "inline-flex";
+			      document.getElementById("input-bg-path").style.display = "none";
+			    }
+			    else if(document.getElementById("select-bg").value == "file") {
+			      document.getElementById("input-bg-url").style.display = "none";
+			      document.getElementById("input-bg-path").style.display = "inline-flex";
+			    }
+			    else {
+			      document.getElementById("input-bg-url").style.display = "none";
+			      document.getElementById("input-bg-path").style.display = "none";
+			    }
+			  }
+			
+			  var bg_type = localStorage.getItem("bg-type");
+			
+			  if(!bg_type) {
+			    bg_type = "space-green";
+			    localStorage.setItem("bg-type", bg_type);
+			  }
+			
+			  if(bg_type) {
+			    if(bg_type == "url") {
+			      document.getElementById("select-bg").value = "url";
+			      document.getElementById("input-bg-url").value = localStorage.getItem("bg-url");
+			      document.getElementById("input-bg-url").style.display = "inline-flex";
+			      document.getElementById("input-bg-path").style.display = "none";
+			
+			      document.body.style.backgroundImage = "url('" + localStorage.getItem("bg-url") + "')";
+			    }
+			    else if(bg_type == "path") {
+			      document.getElementById("select-bg").value = "file";
+			      document.getElementById("input-bg-path").value = localStorage.getItem("bg-path");
+			      document.getElementById("input-bg-url").style.display = "none";
+			      document.getElementById("input-bg-path").style.display = "inline-flex";
+			
+			      document.body.style.backgroundImage = "url('" + localStorage.getItem("bg-path") + "')";
+			    }
+			    else {
+			      document.getElementById("input-bg-url").style.display = "none";
+			      document.getElementById("input-bg-path").style.display = "none";
+			
+			      if(bg_type == "space-blue") {
+			        document.getElementById("select-bg").value = "space-blue";
+			        document.body.style.backgroundImage = "url('assets/images/space-blue.jpg')";
+			      }
+			      else if(bg_type == "space-green") {
+			        document.getElementById("select-bg").value = "space-green";
+			        document.body.style.backgroundImage = "url('assets/images/space-green.jpg')";
+			      }
+			      else if(bg_type == "space-purple") {
+			        document.getElementById("select-bg").value = "space-purple";
+			        document.body.style.backgroundImage = "url('assets/images/space-purple.jpg')";
+			      }
+			      else if(bg_type == "space-red") {
+			        document.getElementById("select-bg").value = "space-red";
+			        document.body.style.backgroundImage = "url('assets/images/space-red.jpg')";
+			      }
+			    }
+			  }
+			
+			</script>
 
-		<script src="assets/js/script.js"></script>
-		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4505367255463806" crossorigin="anonymous"></script>
+			<div id="content">
+				<div class="menu-bars">
+					<i id="open-menu-icon" class="fa fa-bars fa-green" onclick="show_menu()"></i>
+				</div>
+				<div class="settings-cog">
+					<i id="open-settings-icon" class="fa fa-gear-solid fa-green" onclick="show_settings()"></i>
+				</div>
+
+				<audio id="my_audio" onended="snooze_alarm()"></audio>
+				
+				<div align="center" id="div-set-alarm">
+					<div id="div-current-time" class="fs-4em"></div><br><br>
+				
+					<input type="number" min=0 max=23 id="input-hour" onchange="check_hour()"><div class="fs-2em" style="display: inline-flex">:</div>
+					<input type="number" min=0 max=59 id="input-minute" onchange="check_minute()">
+				
+					<button onclick="set_alarm()" id="button-set">set</button>
+					<button onclick="unset_alarm()" id="button-unset" disabled="true">unset</button>
+				</div>
+				
+				<div align="center" id="div-snooze-stop">
+					<img src="assets/images/ring.png" id="img-ring"><br>
+					<div id="div-current-time-playing" class="fs-4em"></div><br>
+				
+					<button onclick="snooze_alarm()" id="button-snooze" disabled="true">snooze</button>
+					<button onclick="stop_alarm()" id="button-stop" disabled="true">stop</button>
+				</div>
+				
+				<script>
+					var h = 0;
+					var alarmTimeout;
+					var myAudio = document.getElementById('my_audio');
+				
+					if(!localStorage.getItem("alarm-choice")) {
+						localStorage.setItem("alarm-choice", "warriyo-mortals");
+					}
+				
+					var tune = localStorage.getItem("alarm-choice")
+				
+					if(!tune)
+					    localStorage.setItem("alarm-choice", "warriyo-mortals");
+				  	else
+				    	document.getElementById("select-tune").value = tune;
+				
+					if(tune == "warriyo-mortals") 
+						myAudio.src = "assets/mp3/Warriyo-Mortals.mp3";
+					else if(tune == "niviro-demons")
+						myAudio.src = "assets/mp3/Niviro-Demons.mp3";
+					else if(tune == "deaf-kev-invincible")
+						myAudio.src = "assets/mp3/DEAF_KEV-Invincible.mp3";
+					else if(tune == "clarx-hay")
+						myAudio.src = "assets/mp3/Clarx-H.A.Y.mp3";
+					else if(tune == "desmeon-hellcat")
+						myAudio.src = "assets/mp3/Desmeon-Hellcat.mp3";
+					//Music provided by http://spoti.fi/NCS
+				
+					function animate_ring() {
+						if(!myAudio.paused) {
+							h = (h+15)%360;
+							document.getElementById('img-ring').style.background = "hsl(" + h + "deg, 75%, 50%)";
+							setTimeout(function(){animate_ring()}, 100);
+						}
+					}
+				
+					function play_alarm() {
+						myAudio.play();
+				
+						document.getElementById('input-hour').disabled = false;
+						document.getElementById('input-minute').disabled = false;
+						document.getElementById('my_audio').disabled = false;
+						document.getElementById('button-set').disabled = false;
+						document.getElementById('button-set').style.display = "inline-flex";
+						document.getElementById('button-unset').disabled = true;
+						document.getElementById('button-unset').style.display = "none";
+				
+						document.getElementById('div-set-alarm').style.display = "none";
+						document.getElementById('div-snooze-stop').style.display = "block";
+				
+						document.getElementById('button-snooze').disabled = false;
+						document.getElementById('button-stop').disabled = false;
+						document.getElementById('button-snooze').focus();
+						
+						animate_ring();
+					}
+				
+					function stop_alarm() {
+						myAudio.pause();
+						myAudio.currentTime = 0;
+				
+						document.getElementById('button-snooze').disabled = true;
+						document.getElementById('button-stop').disabled = true;
+				
+						document.getElementById('div-set-alarm').style.display = "block";
+						document.getElementById('div-snooze-stop').style.display = "none";
+					}
+				
+					function snooze_alarm() {
+						stop_alarm();
+				
+						var alarm_time = new Date();
+						alarm_time.setMinutes(alarm_time.getMinutes() + 10);
+						alarm_time.setSeconds(0);
+				
+						document.getElementById('input-hour').value = String(alarm_time.getHours()).padStart(2, '0');
+						document.getElementById('input-minute').value = String(alarm_time.getMinutes()).padStart(2, '0');
+				
+						set_alarm();
+				
+						document.getElementById('div-set-alarm').style.display = "block";
+						document.getElementById('div-snooze-stop').style.display = "none";
+					}
+				
+					function set_alarm() {
+						var alarm_time = new Date();
+						alarm_time.setHours(document.getElementById('input-hour').value);
+						alarm_time.setMinutes(document.getElementById('input-minute').value);
+						alarm_time.setSeconds(0);
+						var diff = new Date(alarm_time) - new Date();
+				
+						if(diff < 0) {
+							alarm_time.setDate(alarm_time.getDate() + 1);
+							diff = new Date(alarm_time) - new Date();
+						}
+				
+						alarmTimeout = setTimeout(function(){play_alarm()}, diff);
+				
+						document.getElementById('input-hour').disabled = true;
+						document.getElementById('input-minute').disabled = true;
+						document.getElementById('my_audio').disabled = true;
+						document.getElementById('button-set').disabled = true;
+						document.getElementById('button-set').style.display = "none";
+						document.getElementById('button-unset').disabled = false;
+						document.getElementById('button-unset').style.display = "inline-flex";
+					}
+				
+					function unset_alarm() {
+						clearTimeout(alarmTimeout);
+				
+						document.getElementById('input-hour').disabled = false;
+						document.getElementById('input-minute').disabled = false;
+						document.getElementById('my_audio').disabled = false;
+						document.getElementById('button-set').disabled = false;
+						document.getElementById('button-set').style.display = "inline-flex";
+						document.getElementById('button-unset').disabled = true;
+						document.getElementById('button-unset').style.display = "none";
+					}
+				
+					function check_hour() {
+						if(document.getElementById('input-hour').value < 0)
+							document.getElementById('input-hour').value = 0;
+						else if(document.getElementById('input-hour').value > 23)
+							document.getElementById('input-hour').value = document.getElementById('input-hour').value%24;
+				
+						document.getElementById('input-hour').value = String(document.getElementById('input-hour').value).padStart(2, '0');
+					}
+				
+					function check_minute() {
+						if(document.getElementById('input-minute').value < 0)
+							document.getElementById('input-minute').value = 0;
+						else if(document.getElementById('input-minute').value > 59)
+							document.getElementById('input-minute').value = document.getElementById('input-minute').value%60;
+				
+						document.getElementById('input-minute').value = String(document.getElementById('input-minute').value).padStart(2, '0');
+					}
+				
+					var curr_time;
+				
+					function update_current_time() {
+						var curr_time = new Date();
+						if(myAudio.paused)
+							document.getElementById('div-current-time').innerHTML = String(curr_time.getHours()).padStart(2, '0') + ":" + String(curr_time.getMinutes()).padStart(2, '0') + ":" + String(curr_time.getSeconds()).padStart(2, '0');
+						else
+							document.getElementById('div-current-time-playing').innerHTML = String(curr_time.getHours()).padStart(2, '0') + ":" + String(curr_time.getMinutes()).padStart(2, '0') + ":" + String(curr_time.getSeconds()).padStart(2, '0');
+						setTimeout(function(){update_current_time()}, 1);
+					}
+				
+					curr_time = new Date();
+					curr_time.setMinutes(curr_time.getMinutes() + 1);
+				
+					document.getElementById('input-hour').value = curr_time.getHours();
+					document.getElementById('input-minute').value = curr_time.getMinutes();
+					document.getElementById('button-set').focus();
+					document.getElementById('button-unset').style.display = "none";
+				
+					document.getElementById('div-snooze-stop').style.display = "none";
+				
+					update_current_time();
+					document.getElementById('input-hour').value = String(document.getElementById('input-hour').value).padStart(2, '0');
+					document.getElementById('input-minute').value = String(document.getElementById('input-minute').value).padStart(2, '0');
+				</script>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="assets/js/menu.js"></script>
+		<script type="text/javascript" src="assets/js/settings.js"></script>
+		<script type="text/javascript" src="assets/js/script.js"></script>
 	</body>
 </html>
