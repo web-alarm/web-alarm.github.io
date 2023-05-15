@@ -5,14 +5,14 @@
 
   <div class="m-1em-0">
     <label for="select-bg">background:</label>
-    <select id="select-bg" onchange="selectChanged()" style="margin-bottom: 0.5em">
+    <select id="select-bg" onchange="selectBgChanged()" style="margin-bottom: 0.5em">
       <option value="none">none</option>
       <option value="space-blue">space blue</option>
       <option value="space-green">space green</option>
       <option value="space-purple">space purple</option>
       <option value="space-red">space red</option>
       <option value="url">url</option>
-      <option value="file">file</option>
+      <option value="path">path</option>
     </select><br>
     <input 
       id="input-bg-url"
@@ -30,119 +30,220 @@
 
   <div class="m-1em-0">
     <label for="select-tune">tune:</label>
-    <select id="select-tune">
+    <select id="select-tune" onchange="selectTuneChanged();" style="margin-bottom: 0.5em">
       <option value="warriyo-mortals">Warriyo - Mortals</option>
       <option value="niviro-demons">Niviro - Demons</option>
       <option value="deaf-kev-invincible">DEAF KEV - Invincible</option>
       <option value="clarx-hay">Clarx - H.A.Y</option>
       <option value="desmeon-hellcat">Desmeon - Hellcat</option>
       <option value="neffex-my-way">NEFFEX - My Way</option>
+      <option value="url">url</option>
+      <option value="path">path</option>
+    </select>
+    <i id="icon-play" class="fa fa-1-5x fa-play fa-green" onclick="playTune()" style="margin-top: 5px"></i>
+    <i id="icon-stop" class="fa fa-1-5x fa-stop fa-green" onclick="stopTune()" style="margin-top: 5px; display:none;"></i><br>
+    <input 
+      id="input-tune-src"
+      placeholder="src"
+      spellcheck="false"
+      style="max-width:80%; width: 400px; display: none;"
+    >
+    <input id="input-tune-path" type="file" style="display: none;">
+    <audio id="audio-sample"></audio>
+  </div>
+
+  <div class="m-1em-0">
+    <label for="input-snooze-length">snooze length:</label>
+    <input id="input-snooze-length" type="number" min="1" max="30" style="width: 50px">
+  </div>
+
+  <div class="m-1em-0">
+    <label for="select-max-snoozes">max snoozes:</label>
+    <select id="select-max-snoozes" onchange="selectMaxSnoozesChanged()" style="margin-bottom: 0.5em;">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="999">endless</option>
     </select>
   </div>
 
-  <button onclick="save()">save</button>
+  <button id="button-save" onclick="saveSettings()">save</button>
 
   <div id="div-saved" align="center" onclick="hideSavedMsg()">settings saved</div>
 </div>
 
 <script>
+  var audio = document.getElementById("audio-sample");
+  var settings;
+
+  function playTune() {
+    var tune = document.getElementById("select-tune").value;
+
+    if(tune == "warriyo-mortals") 
+      audio.src = "@pathto(output/assets/mp3/Warriyo-Mortals.mp3)";
+    else if(tune == "niviro-demons")
+      audio.src = "@pathto(output/assets/mp3/Niviro-Demons.mp3)";
+    else if(tune == "deaf-kev-invincible")
+      audio.src = "@pathto(output/assets/mp3/DEAF_KEV-Invincible.mp3)";
+    else if(tune == "clarx-hay")
+      audio.src = "@pathto(output/assets/mp3/Clarx-H.A.Y.mp3)";
+    else if(tune == "desmeon-hellcat")
+      audio.src = "@pathto(output/assets/mp3/Desmeon-Hellcat.mp3)";
+    else if(tune == "neffex-my-way")
+      audio.src = "@pathto(output/assets/mp3/NEFFEX-My-Way.mp3)";
+    else if(tune == "url" || tune == "path")
+      audio.src = document.getElementById("input-tune-src").value;
+
+    audio.play().then(function() {
+      setTimeout(stopTune, audio.duration*1000);
+    });
+
+    document.getElementById("icon-play").style.display = "none";
+    document.getElementById("icon-stop").style.display = "inline-block";
+  }
+
+  function stopTune() {
+    if(!audio.paused) {
+      audio.pause();
+      audio.currentTime = 0;
+
+      document.getElementById("icon-play").style.display = "inline-block";
+      document.getElementById("icon-stop").style.display = "none";
+    }
+  }
+
+  function selectBgChanged() {
+    if(document.getElementById("select-bg").value == "url") {
+      document.getElementById("input-bg-url").style.display = "inline-flex";
+      document.getElementById("input-bg-path").style.display = "none";
+    }
+    else if(document.getElementById("select-bg").value == "path") {
+      document.getElementById("input-bg-url").style.display = "none";
+      document.getElementById("input-bg-path").style.display = "inline-flex";
+    }
+    else {
+      document.getElementById("input-bg-url").style.display = "none";
+      document.getElementById("input-bg-path").style.display = "none";
+    }
+  }
+
+  function selectTuneChanged() {
+    if(!audio.paused)
+      stopTune();
+
+    var tune = document.getElementById("select-tune").value;
+
+    if(tune == "url" || tune == "path") {
+      document.getElementById("input-tune-src").style.display = "inline";
+      document.getElementById("input-tune-src").value = "";
+      document.getElementById("input-tune-src").placeholder = tune;
+    }
+    else {
+      document.getElementById("input-tune-src").style.display = "none";
+    }
+  }
+
   function hideSavedMsg() {
     document.getElementById("div-saved").style.display = "none";
   }
 
-  function save() {
+  function saveSettings() {
     var bg_type = document.getElementById("select-bg").value;
 
     if(bg_type == "url") {
-      localStorage.setItem("bg-type", "url");
-      localStorage.setItem("bg-url", document.getElementById("input-bg-url").value);
-      localStorage.removeItem("bg-path");
+      settings["bg-type"] = "url";
+      settings["bg-url"] = document.getElementById("input-bg-url").value;
+      delete settings["bg-path"];
       document.getElementById("input-bg-url").style.display = "inline-flex";
       document.getElementById("input-bg-path").style.display = "none";
 
-      document.body.style.backgroundImage = "url('" + localStorage.getItem("bg-url") + "')";
+      document.body.style.backgroundImage = "url('" + settings["bg-url"] + "')";
     }
-    else if(bg_type == "file") {
-      localStorage.setItem("bg-type", "path");
-      localStorage.setItem("bg-path", document.getElementById("input-bg-path").value);
-      localStorage.removeItem("bg-url");
+    else if(bg_type == "path") {
+      settings["bg-type"] = "path";
+      settings["bg-path"] = document.getElementById("input-bg-path").value;
+      delete settings["bg-url"];
       document.getElementById("input-bg-url").style.display = "none";
       document.getElementById("input-bg-path").style.display = "inline-flex";
 
-      document.body.style.backgroundImage = "url('" + localStorage.getItem("bg-path") + "')";
+      document.body.style.backgroundImage = "url('" + settings["bg-path"] + "')";
     }
     else {
-      localStorage.removeItem("bg-url");
-      localStorage.removeItem("bg-path");
+      delete settings["bg-url"];
+      delete settings["bg-path"];
       document.getElementById("input-bg-url").style.display = "none";
       document.getElementById("input-bg-path").style.display = "none";
 
       if(bg_type == "space-blue") {
-        localStorage.setItem("bg-type", "space-blue");
+        settings["bg-type"] = "space-blue";
         document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-blue.jpg)')";
       }
       else if(bg_type == "space-green") {
-        localStorage.setItem("bg-type", "space-green");
+        settings["bg-type"] = "space-green";
         document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-green.jpg)')";
       }
       else if(bg_type == "space-purple") {
-        localStorage.setItem("bg-type", "space-purple");
+        settings["bg-type"] = "space-purple";
         document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-purple.jpg)')";
       }
       else if(bg_type == "space-red") {
-        localStorage.setItem("bg-type", "space-red");
+        settings["bg-type"] = "space-red";
         document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-red.jpg)')";
       }
       else {
-        localStorage.setItem("bg-type", "none");
+        settings["bg-type"] = "none";
         document.body.style.backgroundImage = "none";
       }
     }
 
-    localStorage.setItem("alarm-choice", document.getElementById("select-tune").value);
+    var tune = document.getElementById("select-tune").value;
+    settings["alarm-choice"] = tune;
+    if(tune == "url" || tune == "path")
+      settings["tune-src"] = document.getElementById("input-tune-src").value;
+    else
+      delete settings["tune-src"];
+
+    settings["snooze-length"] = parseInt(document.getElementById("input-snooze-length").value);
+    settings["max-snoozes"] = parseInt(document.getElementById("select-max-snoozes").value);
+
+    localStorage.setItem("alarm-settings", JSON.stringify(settings));
 
     document.getElementById("div-saved").style.display = "initial";
     setTimeout(hideSavedMsg, 1000);
   }
 
-  function selectChanged() {
-    if(document.getElementById("select-bg").value == "url") {
-      document.getElementById("input-bg-url").style.display = "inline-flex";
-      document.getElementById("input-bg-path").style.display = "none";
-    }
-    else if(document.getElementById("select-bg").value == "file") {
-      document.getElementById("input-bg-url").style.display = "none";
-      document.getElementById("input-bg-path").style.display = "inline-flex";
-    }
-    else {
-      document.getElementById("input-bg-url").style.display = "none";
-      document.getElementById("input-bg-path").style.display = "none";
-    }
-  }
+  function loadSettings() {
+    settings = JSON.parse(localStorage.getItem("alarm-settings"));
 
-  var bg_type = localStorage.getItem("bg-type");
+    if(!settings) {
+      settings = {
+        "bg-type": "space-green",
+        "alarm-choice": "warriyo-mortals",
+        "max-snoozes": 999,
+        "snooze-length": 10
+      }
 
-  if(!bg_type) {
-    bg_type = "space-green";
-    localStorage.setItem("bg-type", bg_type);
-  }
+      localStorage.setItem("alarm-settings", JSON.stringify(settings));
+    }
 
-  if(bg_type) {
+    var bg_type = settings["bg-type"];
+
     if(bg_type == "url") {
       document.getElementById("select-bg").value = "url";
-      document.getElementById("input-bg-url").value = localStorage.getItem("bg-url");
+      document.getElementById("input-bg-url").value = settings["bg-url"];
       document.getElementById("input-bg-url").style.display = "inline-flex";
       document.getElementById("input-bg-path").style.display = "none";
 
-      document.body.style.backgroundImage = "url('" + localStorage.getItem("bg-url") + "')";
+      document.body.style.backgroundImage = "url('" + settings["bg-url"] + "')";
     }
     else if(bg_type == "path") {
-      document.getElementById("select-bg").value = "file";
-      document.getElementById("input-bg-path").value = localStorage.getItem("bg-path");
+      document.getElementById("select-bg").value = "path";
+      document.getElementById("input-bg-path").value = settings["bg-path"];
       document.getElementById("input-bg-url").style.display = "none";
       document.getElementById("input-bg-path").style.display = "inline-flex";
 
-      document.body.style.backgroundImage = "url('" + localStorage.getItem("bg-path") + "')";
+      document.body.style.backgroundImage = "url('" + settings["bg-path"] + "')";
     }
     else {
       document.getElementById("input-bg-url").style.display = "none";
@@ -166,6 +267,20 @@
         document.body.style.backgroundImage = "url('@pathtofile(output/assets/images/space-red.jpg)')";
       }
     }
+
+    var tune = settings["alarm-choice"];
+
+    document.getElementById("select-tune").value = tune;
+
+    if(tune == "url" || tune == "path") {
+      document.getElementById("input-tune-src").value = settings["tune-src"];
+      document.getElementById("input-tune-src").style.display = "inline-flex";
+    }
+
+    document.getElementById("input-snooze-length").value = settings["snooze-length"];
+    document.getElementById("select-max-snoozes").value = settings["max-snoozes"];
   }
+
+  loadSettings();
 
 </script>
