@@ -1,7 +1,8 @@
 :root {
+	--primary-grey: #181a1b;
   --blue: #6495ed;
-  --rnbw-color: #6495ed;
-  --rnbw-color-hover: #14bdff;
+  --primary-green: #5fb267;
+  --primary-blue: #14bdff;
   --fa-angle-path: url("../icons/inverted/angle-down-solid.png");
 }
 
@@ -21,16 +22,16 @@ section, summary, time, mark, audio, video {
 	box-sizing: border-box;
 	max-width: 100%;
 
-	scrollbar-color: var(--rnbw-color) transparent !important;
+	scrollbar-color: var(--green) transparent !important;
 }
 
 body
 {
-	background: #181a1b; /*#313438 1f2223*/
+	background: var(--primary-grey); 
 	background-size: 100vw 100vh;
 	background-repeat: no-repeat;
 	color: #ffffff;
-	font-family: "oxygen";
+	font-family: "ariel";
 	max-width: 100%;
 	min-height: 100%;
 	margin: 0 0;
@@ -59,7 +60,7 @@ ul li {
 
 #content ul li::before {
   content: "\2022";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
-  color: var(--rnbw-color-hover); /* Change the color #cf7327*/
+  color: var(--primary-green); /* Change the color #cf7327*/
   font-weight: bold; /* If you want it to be bold */
   font-size: 11pt;
   display: inline-block; /* Needed to add space between the bullet and the text */
@@ -68,14 +69,18 @@ ul li {
 }
 
 button {
-	background: rgba(255, 255, 255, 0.5);
+	background: rgba(100, 200, 100, 0.5);
 	margin: 0.5em;
 	cursor: pointer;
-	border: 0px;
+	border: 2px solid rgba(20, 20, 20, 0.85);
+	border-radius: 5px;
+}
+
+button:hover {
+	background: rgba(100, 200, 100, 0.75);
 }
 
 input {
-	background: rgba(255, 255, 255, 0.75);
 	border: 0px;
 	color: black;
 }
@@ -145,7 +150,7 @@ input[disabled] {
 	left: 0;
 	right: 0;
 	margin: 0 auto;
-	width: 300px;
+	width: 350px;
 	max-width: 90%;
 	border-radius: 1em;
 }
@@ -156,7 +161,7 @@ input[disabled] {
 	right: 0;
 	margin: 0 auto;
 	padding-top: 1em;
-	width: 300px;
+	width: 350px;
 	max-width: 90%;
 	border-radius: 1em;
 }
@@ -171,17 +176,17 @@ input[disabled] {
 /* Track */
 ::-webkit-scrollbar-track 
 {
- 	background: #181a1b; 
+ 	background: var(--primary-grey); 
 }
  
 /* Handle */
 ::-webkit-scrollbar-thumb 
 {
- 	background: #5fb267;
+ 	background: var(--primary-green);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover 
 {
- 	background: #14bdff;
+ 	background: var(--primary-blue);
 }
