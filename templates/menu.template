@@ -6,15 +6,21 @@
   <nav id="nav" class="noselect">
     <ul>
       <li class="item li-menu li-dark">
-        <a class="item-link" href="@pathto(index)">home</a>
+        <a class="item-link" href="@pathto(index)">alarm</a>
       </li>
-      <li class="item li-menu li-dark has-submenu">
+      <li class="item li-menu li-dark">
+        <a class="item-link" href="@pathto(stopwatch/)">stopwatch</a>
+      </li>
+      <li class="item li-menu li-dark">
+        <a class="item-link" href="@pathto(timer/)">timer</a>
+      </li>
+      @/*<li class="item li-menu li-dark has-submenu">
         <a tabindex="0" href="#" class="submenu-link" onclick="toggle_submenu(0)">work<i class="submenu-link-icon fa fa-angle-down-png fa-1x"></i></a>
         <ul class="submenu" align="center">
           <li class="subitem"><a href="#">eg</a></li>
           <li class="subitem"><a href="#">eg</a></li>
         </ul>
-      </li>
+      </li>*/
     </ul>
   </nav>
 </div>

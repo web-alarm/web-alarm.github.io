@@ -1,0 +1,10 @@
+{
+	"last-built": "17:33:26 Sunday May 21 2023",
+	"name": "assets/js/settings",
+	"title": "settings'",
+	"template": "templates/js.template",
+	"dependencies": [
+		"content/assets/js/settings.js",
+		"templates/js.template"
+	]
+}

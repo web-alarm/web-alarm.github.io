@@ -1,0 +1,68 @@
+{
+	"tracked": [
+		{
+			"name": "assets/css/font-awesome",
+			"title": "font-awesome'",
+			"template": "templates/css.template",
+			"content-ext": ".css",
+			"output-ext": ".css"
+		},
+		{
+			"name": "assets/css/menu",
+			"title": "menu'",
+			"template": "templates/css.template",
+			"content-ext": ".css",
+			"output-ext": ".css"
+		},
+		{
+			"name": "assets/css/settings",
+			"title": "settings'",
+			"template": "templates/css.template",
+			"content-ext": ".css",
+			"output-ext": ".css"
+		},
+		{
+			"name": "assets/css/style",
+			"title": "style'",
+			"template": "templates/css.template",
+			"content-ext": ".css",
+			"output-ext": ".css"
+		},
+		{
+			"name": "assets/js/menu",
+			"title": "menu'",
+			"template": "templates/js.template",
+			"content-ext": ".js",
+			"output-ext": ".js"
+		},
+		{
+			"name": "assets/js/script",
+			"title": "script'",
+			"template": "templates/js.template",
+			"content-ext": ".js",
+			"output-ext": ".js"
+		},
+		{
+			"name": "assets/js/settings",
+			"title": "settings'",
+			"template": "templates/js.template",
+			"content-ext": ".js",
+			"output-ext": ".js"
+		},
+		{
+			"name": "index",
+			"title": "index",
+			"template": "templates/html.template"
+		},
+		{
+			"name": "stopwatch/",
+			"title": "stopwatch",
+			"template": "templates/html.template"
+		},
+		{
+			"name": "timer/",
+			"title": "timer",
+			"template": "templates/html.template"
+		}
+	]
+}

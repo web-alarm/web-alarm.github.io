@@ -1,0 +1,10 @@
+{
+	"last-built": "17:33:26 Sunday May 21 2023",
+	"name": "assets/css/settings",
+	"title": "settings'",
+	"template": "templates/css.template",
+	"dependencies": [
+		"content/assets/css/settings.css",
+		"templates/css.template"
+	]
+}

@@ -1,0 +1,10 @@
+{
+	"last-built": "17:33:26 Sunday May 21 2023",
+	"name": "assets/js/script",
+	"title": "script'",
+	"template": "templates/js.template",
+	"dependencies": [
+		"content/assets/js/script.js",
+		"templates/js.template"
+	]
+}

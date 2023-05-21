@@ -103,14 +103,18 @@ input[disabled] {
 }
 
 #input-hour, #input-minute,
+#input-hours, #input-mins, #input-secs,
 #button-set, #button-unset,
-#button-snooze, #button-stop {
+#button-snooze, #button-stop, #button-reset, 
+#button-start {
 	font-size: 1.5em;
 }
 @media screen and (max-width: 700px) {
 	#input-hour, #input-minute,
+	#input-hours, #input-mins, #input-secs,
 	#button-set, #button-unset,
-	#button-snooze, #button-stop {
+	#button-snooze, #button-stop, #button-reset,
+	#button-start {
 		font-size: 2em;
 	}
 }
@@ -145,7 +149,7 @@ input[disabled] {
 	padding: -3px;
 }
 
-#div-set-alarm {
+#div-set-alarm, #div-set-timer {
 	background: rgba(24, 26, 27, 0.5);
 	left: 0;
 	right: 0;

@@ -1,0 +1,13 @@
+{
+	"last-built": "01:47:02 Monday May 22 2023",
+	"name": "index",
+	"title": "index",
+	"template": "templates/html.template",
+	"dependencies": [
+		"content/index.content",
+		"templates/head.template",
+		"templates/html.template",
+		"templates/menu.template",
+		"templates/settings.template"
+	]
+}

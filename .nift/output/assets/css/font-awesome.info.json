@@ -1,0 +1,10 @@
+{
+	"last-built": "17:33:26 Sunday May 21 2023",
+	"name": "assets/css/font-awesome",
+	"title": "font-awesome'",
+	"template": "templates/css.template",
+	"dependencies": [
+		"content/assets/css/font-awesome.css",
+		"templates/css.template"
+	]
+}

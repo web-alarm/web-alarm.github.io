@@ -1,0 +1,62 @@
+<div align="center" id="div-set-timer">
+	<div id="div-stopwatch" class="fs-4em"></div>
+
+	<button onclick="start_stopwatch()" id="button-start">start</button>
+	<button onclick="stop_stopwatch()"  id="button-stop">stop</button>
+	<button onclick="reset_stopwatch()" id="button-reset">reset</button>
+</div>
+
+<script>
+	var stopwatchTimeout;
+	var curr_hours = 0, curr_mins = 0, curr_secs = 0;
+
+	function display_elapsed() {
+		document.getElementById('div-stopwatch').innerHTML = String(curr_hours).padStart(2, '0') + ":" + String(curr_mins).padStart(2, '0') + ":" + String(curr_secs).padStart(2, '0');
+	}
+
+	function increment_stopwatch() {
+		if(++curr_secs == 60) {
+			curr_secs = 0;
+			if(++curr_mins == 60) {
+				curr_mins = 0;
+				++curr_hours;
+			}
+		}
+
+		display_elapsed();
+
+		stopwatchTimeout = setTimeout(increment_stopwatch, 1000);
+	}
+
+	function start_stopwatch() {
+		stopwatchTimeout = setTimeout(increment_stopwatch, 1000);
+
+		document.getElementById("button-start").style.display = "none";
+		document.getElementById("button-stop").style.display  = "inline-flex";
+		document.getElementById("button-reset").style.display = "none";
+	}
+
+	function stop_stopwatch() {
+		clearTimeout(stopwatchTimeout);
+
+		document.getElementById("button-start").style.display = "inline-flex";
+		document.getElementById("button-stop").style.display  = "none";
+		document.getElementById("button-reset").style.display = "inline-flex";
+	}
+
+	function reset_stopwatch() {
+		stop_stopwatch();
+		curr_hours = curr_mins = curr_secs = 0;
+		display_elapsed();
+
+		document.getElementById("button-start").style.display = "inline-flex";
+		document.getElementById("button-stop").style.display  = "none";
+		document.getElementById("button-reset").style.display = "none";
+	}
+
+	document.getElementById("button-start").style.display = "inline-flex";
+	document.getElementById("button-stop").style.display  = "none";
+	document.getElementById("button-reset").style.display = "none";
+
+	display_elapsed();
+</script>
