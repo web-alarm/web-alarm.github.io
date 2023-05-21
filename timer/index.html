@@ -331,7 +331,7 @@
 					<i id="open-settings-icon" class="fa fa-gear-solid fa-green" onclick="show_settings()"></i>
 				</div>
 
-				<audio id="my_audio" onended="snooze_alarm()"></audio>
+				<audio id="my_audio" onended="stop_alarm()"></audio>
 				
 				<div align="center" id="div-set-timer">
 					<div id="div-time-remaining" class="fs-4em"></div>
@@ -344,23 +344,21 @@
 				
 					<button onclick="start_timer()" id="button-start">start</button>
 					<button onclick="stop_timer()" id="button-stop">stop</button>
-					<button onclick="resume_timer()" id="button-start">resume</button>
+					<button onclick="resume_timer()" id="button-resume">resume</button>
 					<button onclick="reset_timer()" id="button-reset">reset</button>
 				</div>
 				
 				<div align="center" id="div-snooze-stop">
 					<img src="../assets/images/ring.png" id="img-ring"><br>
 				
-					<button onclick="snooze_alarm()" id="button-snooze">snooze</button>
-					<button onclick="stop_alarm()" id="button-stop">stop</button>
+					<button onclick="stop_alarm()" id="button-stop-alarm">stop</button>
 				</div>
 				
 				<script>
 					var h = 0;
 					var timerTimeout;
-					var snooze_count = 0;
 					var myAudio = document.getElementById('my_audio');
-					var curr_hours = 0, curr_mins = 1, curr_secs = 0;
+					var curr_hours = 0, curr_mins = 0, curr_secs = 5;
 				
 					function display_timer() {
 						document.getElementById('div-time-remaining').innerHTML = String(curr_hours).padStart(2, '0') + ":" + String(curr_mins).padStart(2, '0') + ":" + String(curr_secs).padStart(2, '0');
@@ -375,7 +373,7 @@
 							}
 						}
 				
-						if(curr_hours || curr_mins || curr_secs) {
+						if(curr_hours  > 0 || curr_mins > 0 || curr_secs > 0) {
 							display_timer();
 				
 							timerTimeout = setTimeout(decrement_timer, 1000);
@@ -487,20 +485,9 @@
 				
 						myAudio.play();
 				
-						document.getElementById('button-set').style.display = "inline-flex";
-						document.getElementById('button-unset').style.display = "none";
-				
 						document.getElementById('div-set-timer').style.display = "none";
 						document.getElementById('div-snooze-stop').style.display = "block";
-				
-						if(snooze_count < settings["max-snoozes"]) {
-							document.getElementById("button-snooze").style.display = "inline-flex";
-							document.getElementById('button-snooze').focus();
-						}
-						else {
-							document.getElementById("button-snooze").style.display = "none";
-							document.getElementById('button-stop').focus();
-						}
+						document.getElementById('button-stop-alarm').focus();
 				
 						animate_ring();
 					}
@@ -509,43 +496,23 @@
 						myAudio.pause();
 						myAudio.currentTime = 0;
 				
-						document.getElementById('div-set-timer').style.display = "block";
-						document.getElementById('div-snooze-stop').style.display = "none";
+						document.getElementById("div-set-timer").style.display = "block";
+						document.getElementById("div-snooze-stop").style.display = "none";
+				
+						reset_timer();
 					}
 				
-					function snooze_alarm() {
-						stop_alarm();
+					document.getElementById('input-hours').value = String(0).padStart(2, '0');
+					document.getElementById('input-mins').value = String(0).padStart(2, '0');
+					document.getElementById('input-secs').value = String(5).padStart(2, '0');
 				
-						if(snooze_count < settings["max-snoozes"]) {
-							++snooze_count;
-				
-							var alarm_time = new Date();
-							alarm_time.setMinutes(alarm_time.getMinutes() + settings["snooze-length"]);
-							alarm_time.setSeconds(0);
-				
-							document.getElementById('input-hour').value = String(alarm_time.getHours()).padStart(2, '0');
-							document.getElementById('input-minute').value = String(alarm_time.getMinutes()).padStart(2, '0');
-				
-							set_alarm();
-				
-							document.getElementById('div-set-timer').style.display = "block";
-							document.getElementById('div-snooze-stop').style.display = "none";
-						}
-					}
-				
-				
-					document.getElementById('input-hours').value = 0;
-					document.getElementById('input-mins').value = 1;
-					document.getElementById('input-secs').value = 0;
 					document.getElementById('button-start').focus();
 					document.getElementById('button-stop').style.display = "none";
 					document.getElementById('button-reset').style.display = "none";
+					document.getElementById('button-resume').style.display = "none";
 				
 					document.getElementById('div-snooze-stop').style.display = "none";
 				
-					document.getElementById('input-hours').value = String(document.getElementById('input-hours').value).padStart(2, '0');
-					document.getElementById('input-mins').value = String(document.getElementById('input-mins').value).padStart(2, '0');
-					document.getElementById('input-secs').value = String(document.getElementById('input-secs').value).padStart(2, '0');
 				</script>
 			</div>
 		</div>
