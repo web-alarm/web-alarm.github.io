@@ -63,11 +63,6 @@
 			"name": "timer/",
 			"title": "timer",
 			"template": "templates/html.template"
-		},
-		{
-			"name": "yt-test",
-			"title": "yt-test",
-			"template": "templates/html.template"
 		}
 	]
 }
