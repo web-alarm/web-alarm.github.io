@@ -1,28 +1,127 @@
-<audio id="my_audio" onended="snooze_alarm()"></audio>
+<audio id="my_audio" onended="stop_alarm()"></audio>
 
-<div align="center" id="div-set-alarm">
-	<div id="div-current-time" class="fs-4em"></div><br>
+<div align="center" id="div-set-timer">
+	<div id="div-time-remaining" class="fs-4em"></div>
 
-	<input type="number" min=0 max=23 id="input-hour" onchange="check_hour()"><div class="fs-2em" style="display: inline-flex">:</div>
-	<input type="number" min=0 max=59 id="input-minute" onchange="check_minute()">
+	<div id="input" style="padding-top: 0.5em">
+		<input type="number" min=0 max=99 id="input-hours" onchange="check_hour()"><div class="fs-2em" style="display: inline-flex">:</div>
+		<input type="number" min=0 max=59 id="input-mins" onchange="check_mins()"><div class="fs-2em" style="display: inline-flex">:</div>
+		<input type="number" min=0 max=59 id="input-secs" onchange="check_secs()">
+	</div>
 
-	<button onclick="set_alarm()" id="button-set">set</button>
-	<button onclick="unset_alarm()" id="button-unset" disabled="true">unset</button>
+	<button onclick="start_timer()" id="button-start">start</button>
+	<button onclick="stop_timer()" id="button-stop">stop</button>
+	<button onclick="resume_timer()" id="button-resume">resume</button>
+	<button onclick="reset_timer()" id="button-reset">reset</button>
 </div>
 
 <div align="center" id="div-snooze-stop">
 	<img src="@pathtofile(output/assets/images/ring.png)" id="img-ring"><br>
-	<div id="div-current-time-playing" class="fs-4em"></div><br>
 
-	<button onclick="snooze_alarm()" id="button-snooze" disabled="true">snooze</button>
-	<button onclick="stop_alarm()" id="button-stop" disabled="true">stop</button>
+	<button onclick="stop_alarm()" id="button-stop-alarm">stop</button>
 </div>
 
 <script>
 	var h = 0;
-	var alarmTimeout;
-	var snooze_count = 0;
+	var timerTimeout;
 	var myAudio = document.getElementById('my_audio');
+	var curr_hours = 0, curr_mins = 0, curr_secs = 5;
+
+	function display_timer() {
+		document.getElementById('div-time-remaining').innerHTML = String(curr_hours).padStart(2, '0') + ":" + String(curr_mins).padStart(2, '0') + ":" + String(curr_secs).padStart(2, '0');
+	}
+
+	function decrement_timer() {
+		if(--curr_secs == -1) {
+			curr_secs = 59;
+			if(--curr_mins == -1) {
+				curr_mins = 59;
+				--curr_hours;
+			}
+		}
+
+		if(curr_hours  > 0 || curr_mins > 0 || curr_secs > 0) {
+			display_timer();
+
+			timerTimeout = setTimeout(decrement_timer, 1000);
+		}
+		else 
+			play_alarm();
+	}
+
+	function start_timer() {
+		curr_hours = document.getElementById("input-hours").value;
+		curr_mins = document.getElementById("input-mins").value;
+		curr_secs = document.getElementById("input-secs").value;
+
+		resume_timer();
+	}
+
+	function resume_timer() {
+		timerTimeout = setTimeout(decrement_timer, 1000);
+
+		display_timer();
+
+		document.getElementById('div-time-remaining').style.display = "block";
+		document.getElementById('input').style.display = "none";
+		document.getElementById('button-start').style.display = "none";
+		document.getElementById('button-stop').style.display = "inline-flex";
+		document.getElementById('button-resume').style.display = "none";
+		document.getElementById('button-reset').style.display = "none";
+	}
+
+	function stop_timer() {
+		clearTimeout(timerTimeout);
+
+		document.getElementById('button-start').style.display = "none";
+		document.getElementById('button-stop').style.display = "none";
+		document.getElementById('button-resume').style.display = "inline-flex";
+		document.getElementById('button-reset').style.display = "inline-flex";
+	}
+
+	function reset_timer() {
+		curr_hours = curr_mins = curr_secs = 0;
+
+		document.getElementById('div-time-remaining').style.display = "none";
+		document.getElementById('input').style.display = "inline-flex";
+		document.getElementById('button-start').style.display = "inline-flex";
+		document.getElementById('button-stop').style.display = "none";
+		document.getElementById('button-resume').style.display = "none";
+		document.getElementById('button-reset').style.display = "none";
+	}
+
+	function check_hours() {
+		if(document.getElementById('input-hours').value < 0)
+			document.getElementById('input-hours').value = 0;
+		else if(document.getElementById('input-hours').value > 99)
+			document.getElementById('input-hours').value = document.getElementById('input-hours').value%100;
+
+		curr_hours = document.getElementById('input-hours').value;
+
+		document.getElementById('input-hour').value = String(document.getElementById('input-hours').value).padStart(2, '0');
+	}
+
+	function check_mins() {
+		if(document.getElementById('input-mins').value < 0)
+			document.getElementById('input-mins').value = 0;
+		else if(document.getElementById('input-mins').value > 59)
+			document.getElementById('input-mins').value = document.getElementById('input-mins').value%60;
+
+		curr_mins = document.getElementById('input-mins').value;
+
+		document.getElementById('input-mins').value = String(document.getElementById('input-mins').value).padStart(2, '0');
+	}
+
+	function check_secs() {
+		if(document.getElementById('input-secs').value < 0)
+			document.getElementById('input-secs').value = 0;
+		else if(document.getElementById('input-secs').value > 59)
+			document.getElementById('input-secs').value = document.getElementById('input-secs').value%60;
+
+		curr_secs = document.getElementById('input-secs').value;
+
+		document.getElementById('input-secs').value = String(document.getElementById('input-secs').value).padStart(2, '0');
+	}
 
 	function animate_ring() {
 		if(!myAudio.paused) {
@@ -53,28 +152,9 @@
 
 		myAudio.play();
 
-		document.getElementById('input-hour').disabled = false;
-		document.getElementById('input-minute').disabled = false;
-		document.getElementById('my_audio').disabled = false;
-		document.getElementById('button-set').disabled = false;
-		document.getElementById('button-set').style.display = "inline-flex";
-		document.getElementById('button-unset').disabled = true;
-		document.getElementById('button-unset').style.display = "none";
-
-		document.getElementById('div-set-alarm').style.display = "none";
+		document.getElementById('div-set-timer').style.display = "none";
 		document.getElementById('div-snooze-stop').style.display = "block";
-
-		document.getElementById('button-snooze').disabled = false;
-		document.getElementById('button-stop').disabled = false;
-		if(snooze_count < settings["max-snoozes"])
-			document.getElementById('button-snooze').focus();
-		else
-			document.getElementById('button-stop').focus();
-
-		if(snooze_count >= settings["max-snoozes"])
-			document.getElementById("button-snooze").style.display = "none";
-		else
-			document.getElementById("button-snooze").style.display = "inline-flex";
+		document.getElementById('button-stop-alarm').focus();
 
 		animate_ring();
 	}
@@ -83,108 +163,21 @@
 		myAudio.pause();
 		myAudio.currentTime = 0;
 
-		document.getElementById('button-snooze').disabled = true;
-		document.getElementById('button-stop').disabled = true;
+		document.getElementById("div-set-timer").style.display = "block";
+		document.getElementById("div-snooze-stop").style.display = "none";
 
-		document.getElementById('div-set-alarm').style.display = "block";
-		document.getElementById('div-snooze-stop').style.display = "none";
+		reset_timer();
 	}
 
-	function snooze_alarm() {
-		stop_alarm();
+	document.getElementById('input-hours').value = String(0).padStart(2, '0');
+	document.getElementById('input-mins').value = String(0).padStart(2, '0');
+	document.getElementById('input-secs').value = String(5).padStart(2, '0');
 
-		if(snooze_count < settings["max-snoozes"]) {
-			++snooze_count;
-
-			var alarm_time = new Date();
-			alarm_time.setMinutes(alarm_time.getMinutes() + settings["snooze-length"]);
-			alarm_time.setSeconds(0);
-
-			document.getElementById('input-hour').value = String(alarm_time.getHours()).padStart(2, '0');
-			document.getElementById('input-minute').value = String(alarm_time.getMinutes()).padStart(2, '0');
-
-			set_alarm();
-
-			document.getElementById('div-set-alarm').style.display = "block";
-			document.getElementById('div-snooze-stop').style.display = "none";
-		}
-	}
-
-	function set_alarm() {
-		var alarm_time = new Date();
-		alarm_time.setHours(document.getElementById('input-hour').value);
-		alarm_time.setMinutes(document.getElementById('input-minute').value);
-		alarm_time.setSeconds(0);
-		var diff = new Date(alarm_time) - new Date();
-
-		if(diff < 0) {
-			alarm_time.setDate(alarm_time.getDate() + 1);
-			diff = new Date(alarm_time) - new Date();
-		}
-
-		alarmTimeout = setTimeout(function(){play_alarm()}, diff);
-
-		document.getElementById('input-hour').disabled = true;
-		document.getElementById('input-minute').disabled = true;
-		document.getElementById('my_audio').disabled = true;
-		document.getElementById('button-set').disabled = true;
-		document.getElementById('button-set').style.display = "none";
-		document.getElementById('button-unset').disabled = false;
-		document.getElementById('button-unset').style.display = "inline-flex";
-	}
-
-	function unset_alarm() {
-		clearTimeout(alarmTimeout);
-
-		document.getElementById('input-hour').disabled = false;
-		document.getElementById('input-minute').disabled = false;
-		document.getElementById('my_audio').disabled = false;
-		document.getElementById('button-set').disabled = false;
-		document.getElementById('button-set').style.display = "inline-flex";
-		document.getElementById('button-unset').disabled = true;
-		document.getElementById('button-unset').style.display = "none";
-	}
-
-	function check_hour() {
-		if(document.getElementById('input-hour').value < 0)
-			document.getElementById('input-hour').value = 0;
-		else if(document.getElementById('input-hour').value > 23)
-			document.getElementById('input-hour').value = document.getElementById('input-hour').value%24;
-
-		document.getElementById('input-hour').value = String(document.getElementById('input-hour').value).padStart(2, '0');
-	}
-
-	function check_minute() {
-		if(document.getElementById('input-minute').value < 0)
-			document.getElementById('input-minute').value = 0;
-		else if(document.getElementById('input-minute').value > 59)
-			document.getElementById('input-minute').value = document.getElementById('input-minute').value%60;
-
-		document.getElementById('input-minute').value = String(document.getElementById('input-minute').value).padStart(2, '0');
-	}
-
-	var curr_time;
-
-	function update_current_time() {
-		var curr_time = new Date();
-		if(myAudio.paused)
-			document.getElementById('div-current-time').innerHTML = String(curr_time.getHours()).padStart(2, '0') + ":" + String(curr_time.getMinutes()).padStart(2, '0') + ":" + String(curr_time.getSeconds()).padStart(2, '0');
-		else
-			document.getElementById('div-current-time-playing').innerHTML = String(curr_time.getHours()).padStart(2, '0') + ":" + String(curr_time.getMinutes()).padStart(2, '0') + ":" + String(curr_time.getSeconds()).padStart(2, '0');
-		setTimeout(function(){update_current_time()}, 1);
-	}
-
-	curr_time = new Date();
-	curr_time.setMinutes(curr_time.getMinutes() + 1);
-
-	document.getElementById('input-hour').value = curr_time.getHours();
-	document.getElementById('input-minute').value = curr_time.getMinutes();
-	document.getElementById('button-set').focus();
-	document.getElementById('button-unset').style.display = "none";
+	document.getElementById('button-start').focus();
+	document.getElementById('button-stop').style.display = "none";
+	document.getElementById('button-reset').style.display = "none";
+	document.getElementById('button-resume').style.display = "none";
 
 	document.getElementById('div-snooze-stop').style.display = "none";
 
-	update_current_time();
-	document.getElementById('input-hour').value = String(document.getElementById('input-hour').value).padStart(2, '0');
-	document.getElementById('input-minute').value = String(document.getElementById('input-minute').value).padStart(2, '0');
 </script>
