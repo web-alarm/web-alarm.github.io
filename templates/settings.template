@@ -37,6 +37,11 @@
       <option value="clarx-hay">Clarx - H.A.Y</option>
       <option value="desmeon-hellcat">Desmeon - Hellcat</option>
       <option value="neffex-my-way">NEFFEX - My Way</option>
+      <option value="abc-classic">ABC Classic (radio)</option>
+      <option value="abc-radio-national">ABC Radio National (radio)</option>
+      <option value="bbc-world-service">BBC World Service (radio)</option>
+      <option value="kiss-fm">Kiss FM (radio)</option>
+      <option value="triple-j">Triple J (radio)</option>
       <option value="url">url</option>
       <option value="path">path</option>
     </select>
@@ -92,11 +97,22 @@
       audio.src = "@pathto(output/assets/mp3/Desmeon-Hellcat.mp3)";
     else if(tune == "neffex-my-way")
       audio.src = "@pathto(output/assets/mp3/NEFFEX-My-Way.mp3)";
+    else if(tune == "abc-classic")
+      audio.src = "http://live-radio01.mediahubaustralia.com/2FMW/mp3/";
+    else if(tune == "abc-radio-national")
+      audio.src = "http://live-radio01.mediahubaustralia.com/2RNW/mp3/";
+    else if(tune == "bbc-world-service")
+      audio.src = "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service";
+    else if(tune == "kiss-fm")
+      audio.src = "http://cc.net2streams.com:8565/kissfm.mp3";
+    else if(tune == "triple-j")
+      audio.src = "http://live-radio01.mediahubaustralia.com/2TJW/mp3/";
     else if(tune == "url" || tune == "path")
       audio.src = document.getElementById("input-tune-src").value;
 
     audio.play().then(function() {
-      setTimeout(stopTune, audio.duration*1000);
+      if(audio.duration < 10*60*1000)
+        setTimeout(stopTune, audio.duration*1000);
     });
 
     document.getElementById("icon-play").style.display = "none";

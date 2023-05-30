@@ -65,7 +65,7 @@
 		document.getElementById('div-time-remaining').style.display = "block";
 		document.getElementById('input').style.display = "none";
 		document.getElementById('button-start').style.display = "none";
-		document.getElementById('button-stop').style.display = "inline-flex";
+		document.getElementById('button-stop').style.display = "initial";
 		document.getElementById('button-resume').style.display = "none";
 		document.getElementById('button-reset').style.display = "none";
 	}
@@ -75,19 +75,22 @@
 
 		document.getElementById('button-start').style.display = "none";
 		document.getElementById('button-stop').style.display = "none";
-		document.getElementById('button-resume').style.display = "inline-flex";
-		document.getElementById('button-reset').style.display = "inline-flex";
+		document.getElementById('button-resume').style.display = "initial";
+		document.getElementById('button-reset').style.display = "initial";
+		document.getElementById('button-resume').focus();
 	}
 
 	function reset_timer() {
 		curr_hours = curr_mins = curr_secs = 0;
 
 		document.getElementById('div-time-remaining').style.display = "none";
-		document.getElementById('input').style.display = "inline-flex";
-		document.getElementById('button-start').style.display = "inline-flex";
+		document.getElementById('input').style.display = "block";
+		document.getElementById('button-start').style.display = "initial";
 		document.getElementById('button-stop').style.display = "none";
 		document.getElementById('button-resume').style.display = "none";
 		document.getElementById('button-reset').style.display = "none";
+
+		document.getElementById("button-start").focus();
 	}
 
 	function check_hours() {
